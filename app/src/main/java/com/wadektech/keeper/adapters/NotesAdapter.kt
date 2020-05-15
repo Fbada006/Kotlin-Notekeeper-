@@ -21,13 +21,18 @@ class NotesAdapter : ListAdapter<Note, NotesAdapter.NotesViewHolder>(NotesDiffUt
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
         val note = getItem(position)
-        holder.title.text = note.title
-        Log.d("onBindViewHolder():", "{${note.title}} is title")
-        holder.note.text = note.note
+        holder.bind(note)
+
     }
 
     inner class NotesViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        val title : TextView = itemView.tv_note_title
+        private val title : TextView = itemView.tv_note_title
         val note : TextView = itemView.tv_notes_body
+
+        fun bind(noteItem: Note){
+            title.text = noteItem.title
+            note.text = noteItem.note
+        }
     }
+
 }

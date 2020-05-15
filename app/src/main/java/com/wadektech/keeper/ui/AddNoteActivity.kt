@@ -13,9 +13,14 @@ import com.wadektech.keeper.utils.NotesViewModelFactory
 import com.wadektech.keeper.utils.toast
 import com.wadektech.keeper.viewmodels.NotesViewModel
 import kotlinx.android.synthetic.main.activity_add_note.*
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
+import org.kodein.di.generic.instance
 
-class AddNoteActivity : AppCompatActivity() {
-    private var notesViewModel: NotesViewModel? = null
+class AddNoteActivity : AppCompatActivity(), KodeinAware {
+    private lateinit var notesViewModel: NotesViewModel
+    override val kodein by kodein()
+     //private val factory : NotesViewModelFactory by instance<NotesViewModelFactory>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +56,14 @@ class AddNoteActivity : AppCompatActivity() {
             else -> {
                 val notes = Note(title, note)
                 Log.d("saveNotesToDB():", "{$notes} saved.")
-                notesViewModel?.insertNotesToDB(notes)
+                notesViewModel.insertNotesToDB(notes)
                 this.toast("Notes saved...")
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        notesViewModel.cancelJobs()
     }
 }
